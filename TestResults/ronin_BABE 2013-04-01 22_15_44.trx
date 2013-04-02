@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<TestRun id="e25119be-0776-4eee-8f41-61dcf23d66a1" name="ronin@BABE 2013-04-01 22:15:44" runUser="babe\ronin" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <TestSettings name="Local" id="5d16aac3-67ec-41b6-92db-6bb319f180c8">
+    <Description>These are default test settings for a local test run.</Description>
+    <Deployment enabled="false" runDeploymentRoot="ronin_BABE 2013-04-01 22_15_44">
+      <DeploymentItem filename="C:\projects\ExpressionMapper\ExpressionMapper\bin\Debug\ExpressionMapper.dll" />
+    </Deployment>
+    <Execution>
+      <TestTypeSpecific />
+      <AgentRule name="Execution Agents">
+      </AgentRule>
+    </Execution>
+  </TestSettings>
+  <Times creation="2013-04-01T22:15:44.5166031-07:00" queuing="2013-04-01T22:15:46.1776981-07:00" start="2013-04-01T22:15:46.2357014-07:00" finish="2013-04-01T22:15:47.4557712-07:00" />
+  <ResultSummary outcome="Completed">
+    <Counters total="6" executed="6" passed="6" error="0" failed="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+  </ResultSummary>
+  <TestDefinitions>
+    <UnitTest name="MapperFactory_Create_Mapper_From_Null_Throws_NullRefException" storage="c:\projects\expressionmapper\expressionmapper.tests\bin\debug\expressionmapper.tests.dll" id="c8f05b8b-ce7b-9522-c76e-8622b97922f7">
+      <Execution id="d4a64d1b-fd36-45fd-9de8-3ddb71d188eb" />
+      <TestMethod codeBase="C:/projects/ExpressionMapper/ExpressionMapper.Tests/bin/Debug/ExpressionMapper.Tests.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="ExpressionMapperTests.Tests, ExpressionMapper.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="MapperFactory_Create_Mapper_From_Null_Throws_NullRefException" />
+    </UnitTest>
+    <UnitTest name="MapperFactory_Map_Null_From_Throws_NullRefException" storage="c:\projects\expressionmapper\expressionmapper.tests\bin\debug\expressionmapper.tests.dll" id="2e436c5e-2e41-9eeb-a19b-4d910067dbd1">
+      <Execution id="c9446a84-65b1-4827-ab16-902011c9904e" />
+      <TestMethod codeBase="C:/projects/ExpressionMapper/ExpressionMapper.Tests/bin/Debug/ExpressionMapper.Tests.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="ExpressionMapperTests.Tests, ExpressionMapper.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="MapperFactory_Map_Null_From_Throws_NullRefException" />
+    </UnitTest>
+    <UnitTest name="MapperFactory_Map_DTO_To_Model" storage="c:\projects\expressionmapper\expressionmapper.tests\bin\debug\expressionmapper.tests.dll" id="01fb9908-4995-2ad3-6472-f8b327e64cbf">
+      <Execution id="62f49342-cb5a-4be1-a331-0234493c2519" />
+      <TestMethod codeBase="C:/projects/ExpressionMapper/ExpressionMapper.Tests/bin/Debug/ExpressionMapper.Tests.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="ExpressionMapperTests.Tests, ExpressionMapper.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="MapperFactory_Map_DTO_To_Model" />
+    </UnitTest>
+    <UnitTest name="MapperFactory_Map_Null_To" storage="c:\projects\expressionmapper\expressionmapper.tests\bin\debug\expressionmapper.tests.dll" id="8cc68c6e-175b-ede1-5390-d1d47509d751">
+      <Execution id="98e63def-fb3d-414d-831e-baef8060150a" />
+      <TestMethod codeBase="C:/projects/ExpressionMapper/ExpressionMapper.Tests/bin/Debug/ExpressionMapper.Tests.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="ExpressionMapperTests.Tests, ExpressionMapper.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="MapperFactory_Map_Null_To" />
+    </UnitTest>
+    <UnitTest name="MapperFactory_Create_Mapper_From_Not_Null" storage="c:\projects\expressionmapper\expressionmapper.tests\bin\debug\expressionmapper.tests.dll" id="2bdba41f-987f-fe21-c485-7c137f61feaa">
+      <Execution id="6fad5aae-dca2-4ab6-92c6-da98a44a9634" />
+      <TestMethod codeBase="C:/projects/ExpressionMapper/ExpressionMapper.Tests/bin/Debug/ExpressionMapper.Tests.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="ExpressionMapperTests.Tests, ExpressionMapper.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="MapperFactory_Create_Mapper_From_Not_Null" />
+    </UnitTest>
+    <UnitTest name="MapperFactory_Map_Model_To_DTO" storage="c:\projects\expressionmapper\expressionmapper.tests\bin\debug\expressionmapper.tests.dll" id="bbd5a1ab-18b8-a569-6cb2-df3e22cea195">
+      <Execution id="6b4aa849-5d7e-484e-84a8-08f7ba55cc10" />
+      <TestMethod codeBase="C:/projects/ExpressionMapper/ExpressionMapper.Tests/bin/Debug/ExpressionMapper.Tests.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="ExpressionMapperTests.Tests, ExpressionMapper.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="MapperFactory_Map_Model_To_DTO" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <TestEntries>
+    <TestEntry testId="8cc68c6e-175b-ede1-5390-d1d47509d751" executionId="98e63def-fb3d-414d-831e-baef8060150a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2e436c5e-2e41-9eeb-a19b-4d910067dbd1" executionId="c9446a84-65b1-4827-ab16-902011c9904e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="bbd5a1ab-18b8-a569-6cb2-df3e22cea195" executionId="6b4aa849-5d7e-484e-84a8-08f7ba55cc10" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="01fb9908-4995-2ad3-6472-f8b327e64cbf" executionId="62f49342-cb5a-4be1-a331-0234493c2519" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c8f05b8b-ce7b-9522-c76e-8622b97922f7" executionId="d4a64d1b-fd36-45fd-9de8-3ddb71d188eb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2bdba41f-987f-fe21-c485-7c137f61feaa" executionId="6fad5aae-dca2-4ab6-92c6-da98a44a9634" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <Results>
+    <UnitTestResult executionId="98e63def-fb3d-414d-831e-baef8060150a" testId="8cc68c6e-175b-ede1-5390-d1d47509d751" testName="MapperFactory_Map_Null_To" computerName="BABE" duration="00:00:00.1351255" startTime="2013-04-01T22:15:46.2867043-07:00" endTime="2013-04-01T22:15:47.2537596-07:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="98e63def-fb3d-414d-831e-baef8060150a">
+    </UnitTestResult>
+    <UnitTestResult executionId="c9446a84-65b1-4827-ab16-902011c9904e" testId="2e436c5e-2e41-9eeb-a19b-4d910067dbd1" testName="MapperFactory_Map_Null_From_Throws_NullRefException" computerName="BABE" duration="00:00:00.0196434" startTime="2013-04-01T22:15:47.2587599-07:00" endTime="2013-04-01T22:15:47.2837613-07:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c9446a84-65b1-4827-ab16-902011c9904e">
+    </UnitTestResult>
+    <UnitTestResult executionId="6b4aa849-5d7e-484e-84a8-08f7ba55cc10" testId="bbd5a1ab-18b8-a569-6cb2-df3e22cea195" testName="MapperFactory_Map_Model_To_DTO" computerName="BABE" duration="00:00:00.0121498" startTime="2013-04-01T22:15:47.2877616-07:00" endTime="2013-04-01T22:15:47.3037625-07:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6b4aa849-5d7e-484e-84a8-08f7ba55cc10">
+    </UnitTestResult>
+    <UnitTestResult executionId="62f49342-cb5a-4be1-a331-0234493c2519" testId="01fb9908-4995-2ad3-6472-f8b327e64cbf" testName="MapperFactory_Map_DTO_To_Model" computerName="BABE" duration="00:00:00.0050909" startTime="2013-04-01T22:15:47.3107629-07:00" endTime="2013-04-01T22:15:47.3197634-07:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="62f49342-cb5a-4be1-a331-0234493c2519">
+    </UnitTestResult>
+    <UnitTestResult executionId="d4a64d1b-fd36-45fd-9de8-3ddb71d188eb" testId="c8f05b8b-ce7b-9522-c76e-8622b97922f7" testName="MapperFactory_Create_Mapper_From_Null_Throws_NullRefException" computerName="BABE" duration="00:00:00.0207809" startTime="2013-04-01T22:15:47.3247637-07:00" endTime="2013-04-01T22:15:47.3497651-07:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d4a64d1b-fd36-45fd-9de8-3ddb71d188eb">
+    </UnitTestResult>
+    <UnitTestResult executionId="6fad5aae-dca2-4ab6-92c6-da98a44a9634" testId="2bdba41f-987f-fe21-c485-7c137f61feaa" testName="MapperFactory_Create_Mapper_From_Not_Null" computerName="BABE" duration="00:00:00.0018138" startTime="2013-04-01T22:15:47.3747665-07:00" endTime="2013-04-01T22:15:47.3797668-07:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6fad5aae-dca2-4ab6-92c6-da98a44a9634">
+    </UnitTestResult>
+  </Results>
+</TestRun>
