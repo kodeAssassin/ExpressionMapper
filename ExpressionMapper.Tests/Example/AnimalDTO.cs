@@ -9,7 +9,7 @@ namespace ExpressionMapper.Tests.Example
     /// Example Classes representing a DTO with Properties/Fields with matching names and matched and 
     /// mis-matched types
     /// </summary>
-    public class AnimalDTO
+    public class AnimalDTO: BaseDTO
     {
         public string Name { get; set; }
         public Nullable<int> Age { get; set; }
@@ -27,5 +27,8 @@ namespace ExpressionMapper.Tests.Example
 
         public String Color;
         public bool IsPredator;
+
+        public DateTime Updated { get; set; }
+        public List<String> HandlerIds { get; set; }
     }
 }

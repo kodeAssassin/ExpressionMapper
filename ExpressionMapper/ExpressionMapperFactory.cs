@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Collections;
 
 using ExpressionMapper.Conversion;
+using ExpressionMapper.Extensions;
 
 namespace ExpressionMapper.Mapping
 {
+    public delegate void ImplicitMap<From, To>();
+
     /// <summary>
     /// Maps Object properties and fields to another Object based on property field names
     /// </summary>
@@ -16,55 +20,29 @@ namespace ExpressionMapper.Mapping
     /// </remarks>
     public class ExpressionMapperFactory
     {
-        private static readonly String _fromNullRefExMessage = "The  ({0}) From parameter Object reference cannot be null!";
+        private static readonly String _fromNullRefExMessage = "The ({0}) From parameter Object reference cannot be null!";
         private static readonly String _nullRefExMessage = "The ({0}) From parameter and ({1}) To parameter Object references cannot be null!";
+        private static readonly String _collectionMappingError = "Unable to map {0} to {1} Only simple collection implementing ICollection or ICollection<KeyValuePair<>>";
+
+        private static readonly BindingFlags _flags = BindingFlags.FlattenHierarchy | BindingFlags.Public | BindingFlags.Instance;
 
         private static readonly ConstantExpression _nullRef = Expression.Constant(null);
-        private static readonly Type _object = typeof(Object);
 
-        private static readonly MethodInfo _converter = typeof(ConversionHelper).GetMethods(BindingFlags.Public | BindingFlags.Static)
-                                                                                .Where(mi =>
-                                                                                {
-                                                                                    if (mi.Name == "Convert")
-                                                                                    {
-                                                                                        var parms = mi.GetParameters();
-
-                                                                                        if (parms.Length == 2
-                                                                                            && parms[0].ParameterType == _object
-                                                                                            && parms[1].ParameterType.IsGenericParameter)
-                                                                                        {
-                                                                                            return true;
-                                                                                        }
-                                                                                    }
-
-                                                                                    return false;
-                                                                                })
-                                                                                .First();
-
-        /// <summary>
-        /// Tests whether the referenced type is Nullable
-        /// </summary>
-        /// <param name="type"></param>
-        /// <returns></returns>
-        private bool IsNullable(Type type)
-        {
-            return type.IsGenericType &&
-                  type.GetGenericTypeDefinition() == typeof(Nullable<>);
-        }
+        private static readonly ConverterFactory _converter = new ConverterFactory();
 
         /// <summary>
         /// Create instance of To Type
         /// </summary>
         /// <param name="toType"></param>
-        /// <param name="toParameter"></param>
+        /// <param name="target"></param>
         /// <returns></returns>
-        private BinaryExpression CreateInstanceAndAssign(ParameterExpression toParameter)
+        private BinaryExpression CreateInstanceAndAssign(Expression target)
         {
-            var ctor = Expression.New(toParameter.Type);
+            var ctor = Expression.New(target.Type);
             var instance = Expression.MemberInit(ctor);
-            var toParameterAssignment = Expression.Assign(toParameter, instance);
+            var assignment = Expression.Assign(target, instance);
 
-            return toParameterAssignment;
+            return assignment;
         }
 
         /// <summary>
@@ -106,9 +84,9 @@ namespace ExpressionMapper.Mapping
         {
             var fieldMappings = new List<Expression>();
 
-            foreach (var from in fromParameter.Type.GetFields())
+            foreach (var from in fromParameter.Type.GetFields(_flags))
             {
-                foreach (var to in toParameter.Type.GetFields())
+                foreach (var to in toParameter.Type.GetFields(_flags))
                 {
                     if (String.Compare(from.Name, to.Name, StringComparison.InvariantCultureIgnoreCase) == 0)
                     {
@@ -123,8 +101,8 @@ namespace ExpressionMapper.Mapping
                         }
                         else
                         {
-                            var fromIsNullable = IsNullable(from.FieldType);
-                            var toIsNullable = IsNullable(to.FieldType);
+                            var fromIsNullable = from.FieldType.IsNullable();
+                            var toIsNullable = to.FieldType.IsNullable();
 
                             if (fromIsNullable == toIsNullable)
                             {
@@ -150,7 +128,7 @@ namespace ExpressionMapper.Mapping
         }
 
         /// <summary>
-        /// Create Property mappings between From and To objects
+        /// Create Property mappings between From and To Objects
         /// </summary>
         /// <param name="fromType"></param>
         /// <param name="toType"></param>
@@ -161,15 +139,14 @@ namespace ExpressionMapper.Mapping
         {
             var propertyMappings = new List<Expression>();
 
-            foreach (var from in fromParameter.Type.GetProperties())
+            foreach (var from in fromParameter.Type.GetProperties(_flags))
             {
-                foreach (var to in toParameter.Type.GetProperties())
+                foreach (var to in toParameter.Type.GetProperties(_flags))
                 {
                     if (String.Compare(from.Name, to.Name, StringComparison.InvariantCultureIgnoreCase) == 0
                         && from.CanRead
                         && to.CanWrite)
                     {
-
                         var get = Expression.PropertyOrField(fromParameter, from.Name);
                         var set = Expression.PropertyOrField(toParameter, to.Name);
 
@@ -181,8 +158,8 @@ namespace ExpressionMapper.Mapping
                         }
                         else
                         {
-                            var fromIsNullable = IsNullable(from.PropertyType);
-                            var toIsNullable = IsNullable(to.PropertyType);
+                            var fromIsNullable = from.PropertyType.IsNullable();
+                            var toIsNullable = to.PropertyType.IsNullable();
 
                             if (fromIsNullable == toIsNullable)
                             {
@@ -191,7 +168,7 @@ namespace ExpressionMapper.Mapping
                                 propertyMappings.Add(assign);
                             }
                             else
-                            {
+                            {  
                                 var assign = GetMismatchedNullableMapping(get, set, fromIsNullable);
 
                                 propertyMappings.Add(assign);
@@ -241,31 +218,10 @@ namespace ExpressionMapper.Mapping
             }
             else
             {
-                var getter = GetConversionExpression(get, set);
+                var getter = _converter.GetConverter(get, set);
 
                 return Expression.Assign(set, getter);
             }
-        }
-
-        /// <summary>
-        /// Get call to conversion helper passign type to Convert to and default value
-        /// </summary>
-        /// <param name="get"></param>
-        /// <param name="set"></param>
-        /// <returns></returns>
-        private MethodCallExpression GetConversionExpression(MemberExpression get, MemberExpression set)
-        {
-            var genericConvert = _converter.MakeGenericMethod(set.Type);
-            Expression convertVal = get;
-            var valDefault = Expression.Default(set.Type);
-
-            // box if get type is value type
-            if (get.Type.IsValueType)
-            {
-                convertVal = Expression.Convert(get, _object);
-            }
-
-            return Expression.Call(genericConvert, convertVal, valDefault);
         }
 
         /// <summary>
@@ -284,7 +240,7 @@ namespace ExpressionMapper.Mapping
             // if these types are mismatched call convert helper
             if (from != to)
             {
-                getter = GetConversionExpression(get, set);
+                getter = _converter.GetConverter(get, set);
             }
 
             return Expression.Assign(set, getter);
@@ -305,7 +261,7 @@ namespace ExpressionMapper.Mapping
             // if these types are mismatched call convert helper
             if (get.Type != set.Type)
             {
-                getter = GetConversionExpression(get, set);
+                getter = _converter.GetConverter(get, set);
             }
 
             return Expression.Assign(set, getter);
@@ -320,19 +276,35 @@ namespace ExpressionMapper.Mapping
         private ConditionalExpression CreateParameterAssertion(ParameterExpression from, ParameterExpression to)
         {
             var assertInstances = Expression.IfThen(CreateNullParameterCheck(from, to),
-                                                    CreateNullRefException(String.Format(_nullRefExMessage, from.Type.Name, to.Type.Name)));
+                                                    CreateNullRefException(String.Format(_nullRefExMessage, from.Type.FullName, to.Type.FullName)));
             return assertInstances;
         }
 
+        /// <summary>
+        /// Paramater instance null check assertion
+        /// </summary>
+        /// <param name="fromParameter"></param>
+        /// <returns></returns>
         private ConditionalExpression CreateParameterAssertion(ParameterExpression fromParameter)
         {
             var nullRefCheck =  Expression.Equal(fromParameter, _nullRef);
             
             var assertFromInstance = Expression.IfThen(nullRefCheck,
-                                                    CreateNullRefException(String.Format(_fromNullRefExMessage, fromParameter.Type.Name)));
+                                                    CreateNullRefException(String.Format(_fromNullRefExMessage, fromParameter.Type.FullName)));
             return assertFromInstance;
         }
 
+        public ExpressionMapperFactory RegisterCustomConverter<From, To>(Func<From, To> converter)
+        {
+            if (converter == null)
+            {
+                throw new ArgumentNullException("Custom Converter cannot be null!");
+            }
+   
+            _converter.RegisterCustomConversionExpression(converter);
+
+            return this;
+        }
         /// <summary>
         /// Creates a compiled lambda expression thats maps public properties and fields from one Object
         /// to another
@@ -404,15 +376,13 @@ namespace ExpressionMapper.Mapping
             // add the To instance expression last which means it is the return value of the expression block
             expressions.Add(toParameter);
 
-            var mapper = Expression.Lambda<Func<From, To>>(
+            return Expression.Lambda<Func<From, To>>(
                                     Expression.Block(toParameter.Type,
                                         new ParameterExpression[] { toParameter },
                                         expressions
                                     ),
                                     fromParameter
-                                );
-
-            return mapper.Compile();
+                                ).Compile();
         }
     }
 }

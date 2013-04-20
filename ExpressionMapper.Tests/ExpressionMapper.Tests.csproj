@@ -46,6 +46,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Example\Animal.cs" />
+    <Compile Include="Example\BaseDTO.cs" />
+    <Compile Include="Example\BaseEntity.cs" />
     <Compile Include="ExpressionMapperTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Example\AnimalDTO.cs" />

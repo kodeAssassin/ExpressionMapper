@@ -7,6 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ExpressionMapper.Mapping;
 using ExpressionMapper.Extensions;
 using ExpressionMapper.Tests.Example;
+using System.Linq.Expressions;
 
 namespace ExpressionMapperTests
 {
@@ -18,6 +19,7 @@ namespace ExpressionMapperTests
         {
             var from = new AnimalDTO
             {
+                TrackId = Guid.NewGuid(),
                 Species = "Tiger",
                 Name = "Tigger",
                 Weight = 300,
@@ -29,7 +31,10 @@ namespace ExpressionMapperTests
                 Code = Guid.NewGuid(),
 
                 Color = "Orange",
-                IsPredator = true
+                IsPredator = true,
+                Created = DateTime.UtcNow.AddYears(-1).ToString(),
+                Updated = DateTime.UtcNow.AddMonths(-1),
+                HandlerIds = new List<String> { "29164", "1855", "1450"}
             };
             return from;
         }
@@ -38,6 +43,7 @@ namespace ExpressionMapperTests
         {
             var from = new Animal
             {
+                TrackId = Guid.NewGuid(),
                 Species = "Tiger",
                 Name = "Tigger",
                 Weight = 300,
@@ -48,18 +54,21 @@ namespace ExpressionMapperTests
                 Endangered = true,
 
                 Color = "Orange",
-                IsPredator = true
+                IsPredator = true,
+                Created = DateTime.UtcNow.AddYears(-1),
+                Updated = DateTime.UtcNow.AddMonths(-1)
             };
             return from;
         }
         #endregion
 
         #region Assertions
-        private static void AssertDtoCorrectlyMappedToModel(AnimalDTO from, Animal to)
+        private static void Assert_DTO_Correctly_Mapped_To_Model(AnimalDTO from, Animal to)
         {
             Assert.IsNotNull(from, "DTO (From) should not be null");
             Assert.IsNotNull(to, "Model (To) should not be null");
 
+            Assert.AreEqual(from.TrackId, to.TrackId);
             Assert.AreEqual(from.Species, to.Species);
             Assert.AreEqual(from.Name, to.Name);
             Assert.AreEqual(from.Sound, to.Sound);
@@ -76,13 +85,34 @@ namespace ExpressionMapperTests
 
             Assert.AreEqual(from.Color, to.Color);
             Assert.AreEqual(from.IsPredator, to.IsPredator ?? false);
+
+            Assert.AreEqual(from.Created, to.Created.ToString());
+            Assert.AreEqual(from.Updated, to.Updated);
+            Assert.IsTrue((new Func<AnimalDTO, Animal, bool>((f, t) =>
+            {
+                Assert.IsNotNull(f.HandlerIds);
+                Assert.IsTrue(f.HandlerIds.Count() > 0);
+
+                Assert.IsNotNull(t.HandlerIds);
+                Assert.IsTrue(t.HandlerIds.Count() > 0);
+
+                Assert.AreEqual(f.HandlerIds.Count(), t.HandlerIds.Count());
+
+                for (int i = 0; i < f.HandlerIds.Count(); i++)
+                {
+                    Assert.AreEqual(f.HandlerIds[i], t.HandlerIds[i].ToString());
+                }
+
+                return true;
+            }))(from, to));
         }
 
-        private static void AssertFromModelCorrectlyMappedToDto(Animal from, AnimalDTO to)
+        private static void Assert_From_Model_Correctly_Mapped_To_DTO(Animal from, AnimalDTO to)
         {
             Assert.IsNotNull(from, "Model (From) should not be null");
             Assert.IsNotNull(to, "DTO (To) should not be null");
 
+            Assert.AreEqual(from.TrackId, to.TrackId);
             Assert.AreEqual(from.Species, to.Species);
             Assert.AreEqual(from.Name, to.Name);
             Assert.AreEqual(from.Sound, to.Sound);
@@ -99,21 +129,37 @@ namespace ExpressionMapperTests
 
             Assert.AreEqual(from.Color, to.Color);
             Assert.AreEqual(from.IsPredator ?? false, to.IsPredator);
+
+            Assert.AreEqual(from.Created.ToString(), to.Created);
+            Assert.AreEqual(from.Updated, to.Updated);
         } 
         #endregion
 
-        private static readonly ExpressionMapperFactory mapper = new ExpressionMapperFactory();
+        private static readonly ExpressionMapperFactory _mapper;
+
+        static Tests()
+        {
+            _mapper = (new ExpressionMapperFactory()).RegisterCustomConverter(new Func<String, decimal>((num) =>
+                                                   {
+                                                       if (!String.IsNullOrEmpty(num))
+                                                       {
+                                                           return decimal.Parse(num);
+                                                       }
+
+                                                       return 0;
+                                                   }));
+        }
 
         [TestMethod]
         public void MapperFactory_Create_Mapper_From_Not_Null()
         {
             var from = GetTestDTO();
 
-            var map = mapper.CreateImplicitlyMappedType<AnimalDTO, Animal>();
+            var map = _mapper.CreateImplicitlyMappedType<AnimalDTO, Animal>();
 
             var to = map(from);
 
-            AssertDtoCorrectlyMappedToModel(from, to);
+            Assert_DTO_Correctly_Mapped_To_Model(from, to);
         }
 
         [TestMethod]
@@ -121,7 +167,7 @@ namespace ExpressionMapperTests
         {
             AnimalDTO from = null;
 
-            var map = mapper.CreateImplicitlyMappedType<AnimalDTO, Animal>();
+            var map = _mapper.CreateImplicitlyMappedType<AnimalDTO, Animal>();
 
             try
             {
@@ -142,11 +188,11 @@ namespace ExpressionMapperTests
 
             var to = new Animal { Sound = "Growl" };
             
-            var map = mapper.CreateImplicitTypeMapper<AnimalDTO, Animal>();
+            var map = _mapper.CreateImplicitTypeMapper<AnimalDTO, Animal>();
 
             map(from, to);
 
-            AssertDtoCorrectlyMappedToModel(from, to);
+            Assert_DTO_Correctly_Mapped_To_Model(from, to);
         }
 
         [TestMethod]
@@ -155,20 +201,22 @@ namespace ExpressionMapperTests
             var from = GetTestModel();
 
             var to = new AnimalDTO { Sound = "Growl" };
-            var map = mapper.CreateImplicitTypeMapper<Animal, AnimalDTO>();
+
+            var map = _mapper.CreateImplicitTypeMapper<Animal, AnimalDTO>();
 
             map(from, to);
 
-            AssertFromModelCorrectlyMappedToDto(from, to);
+            Assert_From_Model_Correctly_Mapped_To_DTO(from, to);
         }
 
         [TestMethod]
         public void MapperFactory_Map_Null_From_Throws_NullRefException()
         {
+            var map = _mapper.CreateImplicitTypeMapper<AnimalDTO, Animal>();
+            
             AnimalDTO from = null;
-
+            
             var to = new Animal { Sound = "Growl" };
-            var map = mapper.CreateImplicitTypeMapper<AnimalDTO, Animal>();
 
             try
             {
@@ -188,7 +236,7 @@ namespace ExpressionMapperTests
             var from = GetTestDTO();
 
             Animal to = null;
-            var map = mapper.CreateImplicitTypeMapper<AnimalDTO, Animal>();
+            var map = _mapper.CreateImplicitTypeMapper<AnimalDTO, Animal>();
 
             try
             {

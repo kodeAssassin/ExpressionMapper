@@ -1,0 +1,7 @@
+C:\projects\ExpressionMapper\ExpressionMapper.Tests\bin\Release\ExpressionMapper.Tests.dll
+C:\projects\ExpressionMapper\ExpressionMapper.Tests\bin\Release\ExpressionMapper.Tests.pdb
+C:\projects\ExpressionMapper\ExpressionMapper.Tests\bin\Release\ExpressionMapper.dll
+C:\projects\ExpressionMapper\ExpressionMapper.Tests\bin\Release\ExpressionMapper.pdb
+C:\projects\ExpressionMapper\ExpressionMapper.Tests\obj\Release\ResolveAssemblyReference.cache
+C:\projects\ExpressionMapper\ExpressionMapper.Tests\obj\Release\ExpressionMapper.Tests.dll
+C:\projects\ExpressionMapper\ExpressionMapper.Tests\obj\Release\ExpressionMapper.Tests.pdb

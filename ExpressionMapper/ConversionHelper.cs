@@ -10,6 +10,7 @@ namespace ExpressionMapper.Conversion
     public static class ConversionHelper
     {
         private static readonly Type _convertible = typeof(IConvertible);
+        private static readonly String _nullRefError = "Collection of Type {0} cannot be null";
 
         /// <summary>
         /// Converts a value of unknown type to a value typeof(T)
@@ -119,6 +120,27 @@ namespace ExpressionMapper.Conversion
             }
             else
                 return typeof(T);
+        }
+
+        public static void ConvertCollection<From, To>(IEnumerable<From> fromCollection, ICollection<To> toCollection)
+        {
+            var fromType = typeof(From);
+
+            if (fromCollection == null
+                || fromCollection.Count() < 1)
+            {
+                return;
+            }
+
+            if (toCollection == null)
+            {
+                throw new ArgumentNullException(_nullRefError, typeof(To).FullName);
+            }
+
+            foreach (var from in fromCollection.Where((f) => !fromType.IsValueType && f != null ))
+            {
+                toCollection.Add(Convert<To>(from));
+            }
         }
     }
 }

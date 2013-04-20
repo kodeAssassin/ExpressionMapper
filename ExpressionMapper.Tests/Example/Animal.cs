@@ -9,7 +9,7 @@ namespace ExpressionMapper.Tests.Example
     /// Example classes representing a Model with Properties/Fields with matching names and matched and 
     /// mis-matched types
     /// </summary>
-    public class Animal
+    public class Animal : BaseEntity
     {
         public string Name { get; set; }
         public int Age { get; set; }
@@ -27,5 +27,7 @@ namespace ExpressionMapper.Tests.Example
 
         public String Color;
         public Nullable<bool> IsPredator;
+
+        public List<int> HandlerIds { get; set; }
     }
 }

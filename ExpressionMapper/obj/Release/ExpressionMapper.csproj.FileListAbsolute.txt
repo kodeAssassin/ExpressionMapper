@@ -1,0 +1,5 @@
+C:\projects\ExpressionMapper\ExpressionMapper\bin\Release\ExpressionMapper.dll
+C:\projects\ExpressionMapper\ExpressionMapper\bin\Release\ExpressionMapper.pdb
+C:\projects\ExpressionMapper\ExpressionMapper\obj\Release\ResolveAssemblyReference.cache
+C:\projects\ExpressionMapper\ExpressionMapper\obj\Release\ExpressionMapper.dll
+C:\projects\ExpressionMapper\ExpressionMapper\obj\Release\ExpressionMapper.pdb
